@@ -5,11 +5,12 @@ import com.axgrid.state.AxStateContext;
 import com.axgrid.state.AxStateTransaction;
 import com.axgrid.state.exceptions.AxStateNotFoundException;
 import com.axgrid.state.repository.AxStateRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-
+@Slf4j
 public abstract class AxStateService<T extends AxState, C extends AxStateContext> {
 
     @Autowired
@@ -36,10 +37,16 @@ public abstract class AxStateService<T extends AxState, C extends AxStateContext
 
     public void applyTransaction(AxStateTransaction<T, C> transaction, C context) {
         T state = get(getStateId(transaction, context));
-        transaction.apply(state, context);
-        if (stateTransactionListeners != null) stateTransactionListeners.forEach(listener -> listener.process(transaction, state, context));
-        transaction.postEffect(state, context);
-        save(state);
+        try {
+            transaction.apply(state, context);
+            if (stateTransactionListeners != null)
+                stateTransactionListeners.forEach(listener -> listener.process(transaction, state, context));
+            transaction.postEffect(state, context);
+            save(state);
+        }catch (Exception e) {
+            if (log.isDebugEnabled()) log.debug("apply transaction error", e);
+            transaction.error(e);
+        }
     }
 
     protected AxStateService() {
