@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,7 +28,6 @@ public class TestDemoService {
 
     @Test
     public void testTransactionProcess() {
-
         AxDemoState state = service.create();
         Assert.assertNotNull(state.getId());
         state.getPlayers().add(Arrays.asList(10,20,30));
