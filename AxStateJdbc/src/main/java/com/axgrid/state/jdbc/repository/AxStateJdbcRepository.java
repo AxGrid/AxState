@@ -9,6 +9,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.lang.reflect.ParameterizedType;
 import java.sql.PreparedStatement;
@@ -37,7 +38,7 @@ public abstract class AxStateJdbcRepository<T extends AxState> implements AxStat
         }
     }
 
-    private T create(T state) {
+    private void create(T state) {
         try {
             String json = state.encode();
             KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -52,7 +53,6 @@ public abstract class AxStateJdbcRepository<T extends AxState> implements AxStat
         }catch (JsonProcessingException e) {
             throw new AxStateProcessingException(e);
         }
-        return state;
     }
 
 
@@ -75,6 +75,12 @@ public abstract class AxStateJdbcRepository<T extends AxState> implements AxStat
         jdbcTemplate.update("DELETE FROM ax_state WHERE id=?", stateId);
     }
 
+
+    @Scheduled(fixedDelay = 1000L)
+    protected void cleanUp() {
+        long dt = new Date().getTime() - 1000 * 60 * 60 * 12; //12 hours
+        jdbcTemplate.update("DELETE FROM ax_state WHERE update_time<? LIMIT 500;", dt);
+    }
 
     protected AxStateJdbcRepository() {
         this.clazz = (Class<T>) ((ParameterizedType) getClass()
