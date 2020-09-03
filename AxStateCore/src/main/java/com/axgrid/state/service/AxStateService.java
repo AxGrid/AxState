@@ -33,7 +33,7 @@ public abstract class AxStateService<T extends AxState, C extends AxStateContext
         return state;
     }
 
-    public long getStateId(AxStateTransaction<T, C> transaction, C context) { return transaction.getStateId(); }
+    public long getStateId(AxStateTransaction<T, C> transaction, C context) { return transaction.getStateId(context); }
 
     public void applyTransaction(AxStateTransaction<T, C> transaction, C context) {
         T state = get(getStateId(transaction, context));

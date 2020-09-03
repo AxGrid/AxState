@@ -11,6 +11,8 @@ public class AxDemoTurnTransaction extends AxStateTransaction<AxDemoState, AxDem
     int playerIndex;
     int item;
 
+
+
     public AxDemoTurnTransaction(
             long stateId,
             int playerIndex,
@@ -19,6 +21,11 @@ public class AxDemoTurnTransaction extends AxStateTransaction<AxDemoState, AxDem
        this.stateId = stateId;
        this.playerIndex = playerIndex;
        this.item = item;
+    }
+
+    @Override
+    public long getStateId(AxDemoContext context) {
+        return stateId;
     }
 
     @Override
