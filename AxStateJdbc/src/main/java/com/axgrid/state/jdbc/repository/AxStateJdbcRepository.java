@@ -2,10 +2,15 @@ package com.axgrid.state.jdbc.repository;
 
 import com.axgrid.state.AxState;
 import com.axgrid.state.exceptions.AxStateProcessingException;
+import com.axgrid.state.jdbc.AxStateJdbcConfiguration;
 import com.axgrid.state.jdbc.dto.AxStateContainer;
 import com.axgrid.state.repository.AxStateRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -20,6 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Primary
 public abstract class AxStateJdbcRepository<T extends AxState> implements AxStateRepository<T> {
 
     @Autowired
@@ -28,7 +34,8 @@ public abstract class AxStateJdbcRepository<T extends AxState> implements AxStat
     private Class<T> clazz;
 
     @Override
-    public void save(T state) {
+    @CachePut(value = AxStateJdbcConfiguration.STATE_CACHE, key = "#state.id")
+    public T save(T state) {
         if (state.getId() == null) {
             create(state);
         } else {
@@ -39,7 +46,9 @@ public abstract class AxStateJdbcRepository<T extends AxState> implements AxStat
                 throw new AxStateProcessingException(e);
             }
         }
+        return state;
     }
+
 
     private void create(T state) {
         try {
@@ -75,6 +84,7 @@ public abstract class AxStateJdbcRepository<T extends AxState> implements AxStat
 
 
     @Override
+    @Cacheable(value = AxStateJdbcConfiguration.STATE_CACHE, key = "#id")
     public T get(long id) {
         try {
             String data = jdbcTemplate.queryForObject("SELECT `data` FROM ax_state WHERE id=?", new Object[] {id}, String.class);
@@ -89,8 +99,9 @@ public abstract class AxStateJdbcRepository<T extends AxState> implements AxStat
     }
 
     @Override
-    public void delete(long stateId) {
-        jdbcTemplate.update("DELETE FROM ax_state WHERE id=?", stateId);
+    @CacheEvict(value = AxStateJdbcConfiguration.STATE_CACHE, key = "#id")
+    public void delete(long id) {
+        jdbcTemplate.update("DELETE FROM ax_state WHERE id=?", id);
     }
 
 

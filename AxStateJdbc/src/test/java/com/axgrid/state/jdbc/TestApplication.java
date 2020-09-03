@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
 @Configuration
+@EnableAxStateJdbc
 public class TestApplication {
 }
 

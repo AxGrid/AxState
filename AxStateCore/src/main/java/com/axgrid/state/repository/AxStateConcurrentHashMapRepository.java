@@ -17,7 +17,7 @@ public abstract class AxStateConcurrentHashMapRepository<T extends AxState> impl
 
     private Class<T> clazz;
 
-    public void save(AxState state) {
+    public T save(T state) {
         try {
             if (state.getId() == null) {
                 state.setId(lastId.incrementAndGet());
@@ -39,6 +39,7 @@ public abstract class AxStateConcurrentHashMapRepository<T extends AxState> impl
             });
         } catch (JsonProcessingException e) {
         }
+        return state;
     }
 
     public T get(long stateId) {

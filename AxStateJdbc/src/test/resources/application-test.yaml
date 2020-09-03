@@ -8,3 +8,10 @@ spring:
     username: sa
     password: ''
     initialization-mode: always
+
+
+logging:
+  level:
+    com: DEBUG
+    org.springframework.jdbc.core: TRACE
+    org.springframework.jdbc.core.StatementCreatorUtils: TRACE
