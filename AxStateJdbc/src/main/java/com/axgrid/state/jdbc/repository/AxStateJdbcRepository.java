@@ -2,6 +2,7 @@ package com.axgrid.state.jdbc.repository;
 
 import com.axgrid.state.AxState;
 import com.axgrid.state.exceptions.AxStateProcessingException;
+import com.axgrid.state.jdbc.dto.AxStateContainer;
 import com.axgrid.state.repository.AxStateRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,9 @@ import java.lang.reflect.ParameterizedType;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public abstract class AxStateJdbcRepository<T extends AxState> implements AxStateRepository<T> {
 
@@ -31,7 +34,7 @@ public abstract class AxStateJdbcRepository<T extends AxState> implements AxStat
         } else {
             try {
                 String json = state.encode();
-                jdbcTemplate.update("UPDATE ax_state SET `data`=?, `update_time`=? WHERE id=?", json, new Date().getTime(), state.getId());
+                jdbcTemplate.update("UPDATE ax_state SET `data`=?, status=?, `update_time`=? WHERE id=?", json, state.getStatus(), new Date().getTime(), state.getId());
             } catch (JsonProcessingException e) {
                 throw new AxStateProcessingException(e);
             }
@@ -43,16 +46,31 @@ public abstract class AxStateJdbcRepository<T extends AxState> implements AxStat
             String json = state.encode();
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO ax_state (`type`, `data`, `update_time`) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO ax_state (`type`, `data`, `status`, `update_time`) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, clazz.getName());
                 ps.setString(2, json);
-                ps.setLong(3, new Date().getTime());
+                ps.setInt(3, state.getStatus());
+                ps.setLong(4, new Date().getTime());
                 return ps;
             }, keyHolder);
             state.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
         }catch (JsonProcessingException e) {
             throw new AxStateProcessingException(e);
         }
+    }
+
+    @Override
+    public List<T> getAll(int status) {
+        List<AxStateContainer> datas = jdbcTemplate.query("SELECT `data` FROM ax_state WHERE status=?", new AxDataRowMapper(), status);
+        return datas.stream().map(sc -> {
+            try {
+                T state = T.decode(sc.getJson(), clazz);
+                state.setId(sc.getId());
+                return state;
+            }catch (JsonProcessingException e) {
+                return null;
+            }
+        }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
 

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public abstract class AxState {
 
     Long id;
+    int status = 0; // Специальноеполе отражающиеся в базе
 
     static final ObjectMapper mapper = new ObjectMapper();
 
