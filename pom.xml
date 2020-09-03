@@ -7,7 +7,7 @@
     <groupId>com.axgrid</groupId>
     <artifactId>AxState</artifactId>
     <packaging>pom</packaging>
-    <version>1.1</version>
+    <version>1.2</version>
     <modules>
         <module>AxStateCore</module>
         <module>AxStateJdbc</module>
