@@ -5,6 +5,7 @@ import com.axgrid.state.dto.AxJoinGroup;
 import com.axgrid.state.join.repository.AxJoinRepository;
 import com.axgrid.state.service.AxBotService;
 import com.axgrid.state.service.AxJoinListener;
+import com.axgrid.state.service.AxJoinService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,12 +19,20 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 @Slf4j
 @Service
-public class AxJoinService {
+public class AxJoinServiceImpl implements AxJoinService {
 
     final List<AxJoinListener> listeners;
 
     @Autowired
     AxJoinRepository joinRepository;
+
+    public AxJoin save(AxJoin join) {
+        return joinRepository.save(join);
+    }
+
+    public AxJoin get(long userId) {
+        return joinRepository.get(userId);
+    }
 
     private Long getStateId(AxJoinGroup group, List<AxJoin> joinPlayers) {
         for(AxJoinListener l : listeners) {
@@ -56,7 +65,7 @@ public class AxJoinService {
     }
 
     @Autowired(required = false)
-    public AxJoinService(List<AxJoinListener> listeners) {
+    public AxJoinServiceImpl(List<AxJoinListener> listeners) {
         if (listeners == null)
             this.listeners = Collections.emptyList();
         else
