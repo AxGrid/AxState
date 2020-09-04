@@ -1,6 +1,6 @@
 package com.axgrid.state.repository;
 
-import com.axgrid.state.AxState;
+import com.axgrid.state.dto.AxState;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.lang.reflect.ParameterizedType;

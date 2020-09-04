@@ -1,6 +1,6 @@
 package com.axgrid.state.jdbc.repository;
 
-import com.axgrid.state.AxState;
+import com.axgrid.state.dto.AxState;
 import com.axgrid.state.exceptions.AxStateProcessingException;
 import com.axgrid.state.jdbc.AxStateJdbcConfiguration;
 import com.axgrid.state.jdbc.dto.AxStateContainer;

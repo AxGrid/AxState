@@ -1,5 +1,7 @@
-package com.axgrid.state;
+package com.axgrid.state.dto;
 
+import com.axgrid.state.dto.AxState;
+import com.axgrid.state.dto.AxStateContext;
 import com.axgrid.state.exceptions.AxStateProcessingException;
 
 public abstract class AxStateTransaction<T extends AxState, C extends AxStateContext> {

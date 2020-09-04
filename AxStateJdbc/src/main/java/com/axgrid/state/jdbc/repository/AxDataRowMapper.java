@@ -1,6 +1,5 @@
 package com.axgrid.state.jdbc.repository;
 
-import com.axgrid.state.AxState;
 import com.axgrid.state.jdbc.dto.AxStateContainer;
 import org.springframework.jdbc.core.RowMapper;
 

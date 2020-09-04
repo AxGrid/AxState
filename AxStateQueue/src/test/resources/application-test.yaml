@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: AxQueue (Test)
+  datasource:
+    platform: h2
+    url: jdbc:h2:mem:testdb;mode=MySQL
+    driverClassName: org.h2.Driver
+    username: sa
+    password: 'secret'
+    initialization-mode: always
+    hikari:
+      idle-timeout: 10000
+      maximumPoolSize: 20
+

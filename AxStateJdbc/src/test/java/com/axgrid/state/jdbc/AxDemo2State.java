@@ -1,7 +1,7 @@
 package com.axgrid.state.jdbc;
 
 
-import com.axgrid.state.AxState;
+import com.axgrid.state.dto.AxState;
 import lombok.Data;
 
 @Data

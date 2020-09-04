@@ -1,6 +1,6 @@
 package com.axgrid.state.demo;
 
-import com.axgrid.state.AxStateTransaction;
+import com.axgrid.state.dto.AxStateTransaction;
 import lombok.Data;
 import lombok.val;
 

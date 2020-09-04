@@ -1,4 +1,4 @@
-package com.axgrid.state;
+package com.axgrid.state.dto;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

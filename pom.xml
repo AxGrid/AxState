@@ -11,6 +11,8 @@
     <modules>
         <module>AxStateCore</module>
         <module>AxStateJdbc</module>
+        <module>AxStateQueue</module>
+        <module>AxStateJoin</module>
     </modules>
 
     <parent>

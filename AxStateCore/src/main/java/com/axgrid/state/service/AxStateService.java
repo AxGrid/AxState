@@ -1,8 +1,8 @@
 package com.axgrid.state.service;
 
-import com.axgrid.state.AxState;
-import com.axgrid.state.AxStateContext;
-import com.axgrid.state.AxStateTransaction;
+import com.axgrid.state.dto.AxState;
+import com.axgrid.state.dto.AxStateContext;
+import com.axgrid.state.dto.AxStateTransaction;
 import com.axgrid.state.exceptions.AxStateNotFoundException;
 import com.axgrid.state.repository.AxStateRepository;
 import lombok.extern.slf4j.Slf4j;

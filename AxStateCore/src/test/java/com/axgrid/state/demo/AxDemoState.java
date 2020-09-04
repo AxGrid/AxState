@@ -1,6 +1,6 @@
 package com.axgrid.state.demo;
 
-import com.axgrid.state.AxState;
+import com.axgrid.state.dto.AxState;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
