@@ -3,7 +3,6 @@ package com.axgrid.state.join.service;
 import com.axgrid.state.dto.AxJoin;
 import com.axgrid.state.dto.AxJoinGroup;
 import com.axgrid.state.join.repository.AxJoinRepository;
-import com.axgrid.state.service.AxBotService;
 import com.axgrid.state.service.AxJoinListener;
 import com.axgrid.state.service.AxJoinService;
 import lombok.extern.slf4j.Slf4j;

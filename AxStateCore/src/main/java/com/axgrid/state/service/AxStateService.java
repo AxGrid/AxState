@@ -39,10 +39,10 @@ public abstract class AxStateService<T extends AxState, C extends AxStateContext
         T state = get(getStateId(transaction, context));
         try {
             transaction.apply(state, context);
+            save(state);
+            transaction.postEffect(state, context);
             if (stateTransactionListeners != null)
                 stateTransactionListeners.forEach(listener -> listener.process(transaction, state, context));
-            transaction.postEffect(state, context);
-            save(state);
         }catch (Exception e) {
             if (log.isDebugEnabled()) log.debug("apply transaction error", e);
             transaction.error(e);
