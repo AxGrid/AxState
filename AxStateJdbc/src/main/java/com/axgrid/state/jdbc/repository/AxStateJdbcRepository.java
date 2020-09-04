@@ -70,7 +70,7 @@ public abstract class AxStateJdbcRepository<T extends AxState> implements AxStat
 
     @Override
     public List<T> getAll(int status) {
-        List<AxStateContainer> datas = jdbcTemplate.query("SELECT `data` FROM ax_state WHERE status=?", new AxDataRowMapper(), status);
+        List<AxStateContainer> datas = jdbcTemplate.query("SELECT id, `data`, `status` FROM ax_state WHERE status=?", new AxDataRowMapper(), status);
         return datas.stream().map(sc -> {
             try {
                 T state = T.decode(sc.getJson(), clazz);
