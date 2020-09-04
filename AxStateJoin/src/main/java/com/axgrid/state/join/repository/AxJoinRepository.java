@@ -25,7 +25,7 @@ public class AxJoinRepository {
 
     public List<AxJoinGroup> getGroups() {
         return jdbcTemplate.query("SELECT count(*) as count, type, player_count FROM ax_join WHERE state_id IS NOT NULL AND update_time>? AND count >= player_count GROUP BY `type`, `player_count`",
-                new AxJoinGroup.Mapper(), new Date().getTime() - 10_000);
+                new AxJoinGroupMapper(), new Date().getTime() - 10_000);
     }
 
     public AxJoin get(long userId) {
